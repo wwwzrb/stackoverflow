@@ -11,10 +11,12 @@ The simplest socket client and server exmaples.
 The executable files will be generated at the current directory:
 *  client
 *  server
-Clean generated files:
+
+# Clean generated files:
 ```
 % make clean
 ```
+
 # Running 
 
 ------
