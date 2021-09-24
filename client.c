@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(argv[1]);
-	server_addr.sin_port = htons(8000);  //服务器端口
+	server_addr.sin_port = htons(8000);  // server default port
 
     int sock_client;
 	char send_buf[65536];
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    //连接服务器，成功返回0，错误返回-1
+    //connect server, return 0 with success, return -1 with error
     if (connect(sock_client, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
         perror("connect");
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     inet_ntop(AF_INET, &server_addr.sin_addr, server_ip, INET_ADDRSTRLEN);
     printf("connected server(%s:%d). \n", server_ip, ntohs(server_addr.sin_port));
 
-    //向服务器发送信息
+    //send a message to server
     send(sock_client, send_buf, strlen(send_buf), 0);
     close(sock_client);
 

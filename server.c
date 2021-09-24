@@ -6,26 +6,24 @@
 #include <unistd.h> // for close
 #include <string.h>
 
-/*
- * 用于创建大量TCP连接
- * 服务器端：创建一个监听socket
- */
+
 int main(int argc, char *argv[]) {
 
-	int server_sockfd;		// 服务器的套接字	
-	struct sockaddr_in server_addr;		// 服务器的地址
-
-	server_addr.sin_family=AF_INET; 	//设置为IP通信
-	server_addr.sin_addr.s_addr=INADDR_ANY;		//服务器IP地址--允许连接到所有本地地址上
-	server_addr.sin_port=htons(8000); 		//服务器端口号
+	int server_sockfd;		// server socket fd	
+	struct sockaddr_in server_addr;		// server info struct
+	server_addr.sin_family=AF_INET; 	// TCP/IP
+	server_addr.sin_addr.s_addr=INADDR_ANY;		// server addr--permit all connection
+	server_addr.sin_port=htons(8000); 		// server port
 
 	/*创建服务器端套接字--IPv4协议，面向连接通信，TCP协议*/
+	/* create socket fd with IPv4 and TCP protocal*/
 	if((server_sockfd=socket(PF_INET,SOCK_STREAM,0))<0) {  
 					perror("socket error");
 					return 1;
 	}
 
 	/*将套接字绑定到服务器的网络地址上*/
+	/* bind socket with server addr */
 	if(bind(server_sockfd,(struct sockaddr *)&server_addr,sizeof(struct sockaddr))<0) {
 					perror("bind error");
 					return 1;
@@ -33,6 +31,7 @@ int main(int argc, char *argv[]) {
 
 
 	/*监听连接请求--监听队列长度为20*/
+	/* listen connection request with a queue length of 20 */
 	if(listen(server_sockfd,20)<0) {
 					perror("listen error");
 					return 1;
@@ -46,6 +45,7 @@ int main(int argc, char *argv[]) {
 		struct sockaddr_in client_addr;
 		socklen_t length = sizeof(client_addr);
 		//进程阻塞在accept上，成功返回非负描述字，出错返回-1
+		// block on accept until positive fd or error
 		int conn = accept(server_sockfd, (struct sockaddr*)&client_addr,&length);
 		if(conn<0) {
 			perror("connect");
